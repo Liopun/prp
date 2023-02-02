@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/liopun/prp/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -17,6 +18,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	config.Init()
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "There was error running prp CLI: %s", err)
 		os.Exit(1)

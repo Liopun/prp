@@ -9,10 +9,11 @@ import (
 
 var brewCmd = &cobra.Command{
 	Use: "brew",
-	Short: "create a restoring point for installed homebrew package",
+	Short: "Create a restoring point for installed homebrew package",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		res, err := prp.CreateBrewDump()
-		fmt.Println(res)
+		fmt.Println("Generating homebrew dump file...")
+		_, err := prp.CreateBrewDump()
+		fmt.Println("Brew package restore point has been successfully created! You will need to run 'prp brew restore' in the future")
 		return err
 	},
 }
