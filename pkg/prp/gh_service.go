@@ -2,18 +2,14 @@ package prp
 
 import "context"
 
-type Service struct {
-	repo Repo
+type GhService struct {
+	repo GhRepo
 }
 
-func NewService(repo Repo) *Service {
-	return &Service{repo}
+func NewGhService(repo GhRepo) *GhService {
+	return &GhService{repo}
 }
 
-func (s *Service) AddGithubRepo(c context.Context) (string, error) {
-	return s.repo.AddGithubRepo(c)
-}
-
-func (s *Service) SignOut(c context.Context) (string, error) {
-	return s.repo.SignOut(c)
+func (s *GhService) AddGitPrivateRepo(ctx context.Context, inp GitRepositoryInput) (string, error) {
+	return s.repo.AddGitPrivateRepo(ctx, inp)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	verifyTokenUrl = "https://api.github.com/issues"
+	verifyTokenUrl = "%s/issues"
 )
 
 func VerifyToken() error {
@@ -27,6 +27,17 @@ func SetToken(token string) error {
 	viper.Set("token", token)
 
 	err := viper.WriteConfig() 
+	if err != nil {
+		return fmt.Errorf("could not write config: %s", err.Error())
+	}
+
+	return nil
+}
+
+func RemoveToken() error {
+	viper.Set("token", "")
+
+	err := viper.WriteConfig()
 	if err != nil {
 		return fmt.Errorf("could not write config: %s", err.Error())
 	}

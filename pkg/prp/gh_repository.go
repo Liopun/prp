@@ -2,29 +2,45 @@ package prp
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/go-github/v50/github"
 )
 
-type Repo interface {
-	AddGithubRepo(ctx context.Context) (string, error)
-	SignOut(ctx context.Context) (string, error)
+type GhRepo interface {
+	AddGitPrivateRepo(ctx context.Context, inp GitRepositoryInput) (string, error)
 }
 
-type Repository struct {
+type GhRepository struct {
 	client *github.Client
 }
 
-func NewRepository(client *github.Client) *Repository {
-	return &Repository{
-		client,
+// const (
+// 	repoName string = "prp-backup-%s"
+// 	description string = "This is an automatic created repo for backing up your package bundle dump files. PRP uses this repository by default to restore your packages. It's private by default, but you can change this if you wish to share your bundles files with others."
+// )
+
+type GitRepoInput struct {
+	Name string
+	Description string
+}
+
+func NewGhRepo(client *github.Client) *GhRepository {
+	return &GhRepository{
+		client: client,
 	}
 }
 
-func (r *Repository) AddGithubRepo(ctx context.Context) (string, error) {
-	return "", nil
-}
+func (r *GhRepository) AddGitPrivateRepo(ctx context.Context, inp GitRepositoryInput) (string, error) {
+	gitRepo := &github.Repository{
+		Name: &inp.RepositoryName,
+		Private: &inp.Private,
+		Description: &inp.Description,
+	}
+	repo, _, err := r.client.Repositories.Create(ctx, "", gitRepo)
+	if err != nil {
+		return "", err
+	}
 
-func (r *Repository) SignOut(ctx context.Context) (string, error) {
-	return "", nil
+	return fmt.Sprintf("New repo created: %s", repo.GetName()), nil
 }

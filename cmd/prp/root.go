@@ -13,7 +13,7 @@ var rootCmd = &cobra.Command{
 	Use: "prp",
 	Version: version,
 	Short: "prp - package restore point",
-	Long: "A simple common package backup manager CLI tool that restores your package to a previously saved state point.",
+	Long: "A simple package backup manager CLI tool that restores your package to a previously saved state point.",
 	Run: func(cmd *cobra.Command, args []string) {},
 }
 

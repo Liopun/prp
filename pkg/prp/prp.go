@@ -2,6 +2,7 @@ package prp
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/viper"
@@ -20,6 +21,17 @@ func CreateBrewDump() (string, error) {
 
 	if len(brewDir) == 0 {
 		return "", fmt.Errorf("%s dir was not set properly", brewEnv)
+	}
+
+	brewFile := brewDir+"/Brewfile"
+
+	_, err := os.Stat(brewFile)
+	if err == nil {
+		fmt.Println("brew dump file found: getting rid of it first...")
+		err = os.Remove(brewFile)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	cmd := exec.Command(cbd, cbdBundle, cbdDump)

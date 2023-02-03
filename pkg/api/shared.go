@@ -2,7 +2,8 @@ package api
 
 import (
 	"bytes"
-	"io/ioutil"
+	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -20,7 +21,7 @@ type requestResponse struct {
 }
 
 func makeRequest(reqtype string, path string, body []byte) *requestResponse {
-	req, err := http.NewRequest(reqtype, path, bytes.NewBuffer(body))
+	req, err := http.NewRequest(reqtype, fmt.Sprintf(path, viper.GetString("BASE_URL")), bytes.NewBuffer(body))
 	if err != nil {
 		return &requestResponse{
 			statusCode: req.Response.StatusCode,
@@ -32,6 +33,7 @@ func makeRequest(reqtype string, path string, body []byte) *requestResponse {
 	req.Header.Set("Content-type", "application/json")
 	req.Header.Set("Cache-Control", "no-cache, no-store")
 	req.Header.Set("Authorization", "token "+viper.GetString("token"))
+
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		return &requestResponse{
@@ -43,7 +45,7 @@ func makeRequest(reqtype string, path string, body []byte) *requestResponse {
 
 	defer resp.Body.Close()
 
-	respBody, err := ioutil.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return &requestResponse{
 			statusCode: resp.StatusCode,
