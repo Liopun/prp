@@ -1,18 +1,18 @@
 # Package Restore Point CLI tool
-A simple CLI tool that backups your installed packages list, and reinstall the packages to a new system.
-This offers the portability of your current installed packages.
+A convenient solution for backing up and restoring your installed packages. This tool offers the portability of your current installed packages and utilizes your GitHub account as a data store for maintaining a record of your packages for future use.
 
-This package use your github as data store for keeping your installed packages list for future use.
-
-## Supported OS
+## Supported On
 - MacOS
+
+## Supported Package Managers
+- Homebrew
 
 ## Installation
 ### Homebrew
 `brew install liopun/brew/prp`
 
 ### Binary
-The latest release can be found [here](https://github.com/Liopun/prp/releases) and it needs to be in you path
+The latest release of PRP CLI tool can be found [here](https://github.com/Liopun/prp/releases), and it must be in your PATH for effective usage.
 
 ### Source
 1. Clone this repository
@@ -20,13 +20,13 @@ The latest release can be found [here](https://github.com/Liopun/prp/releases) a
 3. Run `./.dist/prp -h` or Copy `prp` file to your `$PATH` and use it from there.
 
 ## Get Started
-- To get started and authenticate with github, run `prp gh TOKEN_HERE`
-You can find out out adding a personal token to your github account [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- Run the following command to authenticate with Github `prp gh TOKEN_HERE`
+- You can find out more information about Github personal tokens [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-## Supported Package Managers
+## Commands
 - Homebrew
-    - `backup` your current homebrew state -> `prp brew`
-    - `restore` your previously saved state -> `prp restore brew`
+    - Backup your current Homebrew packages: `prp brew`
+    - Restore/Install your previously saved Homebrew packages to another system: `prp restore brew`
 
 ## Roadmap
 - Support more package managers
@@ -38,9 +38,9 @@ You can find out out adding a personal token to your github account [here](https
 1. Clone this repository
 2. Add your branch `git checkout -b BRANCH_NAME_HERE main`
 3. Fetch dependencies `go mod download`
-3. Implement your changes
-4. Run `make build ver="v0.16"` to build the project
-5. Happy hacking!
+4. Implement your changes
+5. Run `make build ver="v0.16"` to build the project
+6. Happy hacking!
 
 ## Publishing
 1. `make release ver="v0.16"`
