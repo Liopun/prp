@@ -43,4 +43,4 @@ The latest release of PRP CLI tool can be found [here](https://github.com/Liopun
 6. Happy hacking!
 
 ## Publishing
-1. `make release ver="v0.16"`
+`make release ver="v0.16"`
