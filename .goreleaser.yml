@@ -1,10 +1,11 @@
 project_name: prp
+before:
+  hooks:
+    -  go mod tidy
 builds:
   - env:
       - CGO_ENABLED=0
     goos:
-      - linux
-      - windows
       - darwin
     goarch:
       - amd64
@@ -15,8 +16,6 @@ builds:
 archives:
 - replacements:
     darwin: Darwin
-    linux: Linux
-    windows: Windows
     386: i386
     amd64: x86_64
 checksum:
@@ -29,18 +28,9 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
-# nfpms:
-#   - license: MIT
-#     description: "prp CLI provides!"
-#     formats:
-#       - deb
-#       - rpm
-#     homepage: "https://prp.io"
-#     maintainer: "PRP <support@prp.io>"
-#     vendor: Prp
 brews:
-  - description: "Pusher CLI!"
+  - description: "A simple package backup manager CLI tool that restores your brew packages to a previously saved state point"
     tap:
-      name: homebrew-brew
+      name: homebrew-tap
       owner: prp
     homepage: "https://prp.io/"
