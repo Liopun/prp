@@ -1,0 +1,46 @@
+project_name: prp
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - '386'
+    ldflags: -s -w -X github.com/liopun/prp/cmd/prp.version={{.Version}}
+    tags:
+      - osusergo
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+# nfpms:
+#   - license: MIT
+#     description: "prp CLI provides!"
+#     formats:
+#       - deb
+#       - rpm
+#     homepage: "https://prp.io"
+#     maintainer: "PRP <support@prp.io>"
+#     vendor: Prp
+brews:
+  - description: "Pusher CLI!"
+    tap:
+      name: homebrew-brew
+      owner: prp
+    homepage: "https://prp.io/"

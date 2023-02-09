@@ -11,6 +11,10 @@ git:
 	git commit -m "${msg}"
 	git push
 
+release:
+	git tag -a "${ver}" -m "${ver}"
+	git push origin "${ver}"
+
 lint:
 	golangci-lint run
 
