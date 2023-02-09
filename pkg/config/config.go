@@ -13,6 +13,7 @@ import (
 const (
 	configDir = ".config/"
 	brewDir = "brew/"
+	gitDir = ".git/"
 )
 
 func Init() {
@@ -42,6 +43,7 @@ func Init() {
 	viper.SetConfigFile(getConfigPath())
 	viper.SetDefault("BASE_URL", "https://api.github.com")
 	viper.SetDefault("BREW_DIR", getDirPath(brewDir))
+	viper.SetDefault("GIT_DIR", getDirPath(gitDir))
 	viper.SetDefault("REPO_NAME", "prp-backup-repo")
 	err := viper.ReadInConfig()
 	if err != nil {

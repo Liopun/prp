@@ -1,26 +1,36 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/viper"
 )
 
 const (
-	verifyTokenUrl = "%s/issues"
+	verifyTokenUrl = "%s/user"
 )
 
-func VerifyToken() error {
-	response := makeRequest("GET", verifyTokenUrl, nil)
-	if response.statusCode != 200 {
-		if response.error != nil {
-			return response.error
-		}
+type tokenResponseData struct {
+	ID        int     `json:"id"`
+	Login     string  `json:"login"`
+	Name        string     `json:"name"`
+	Email        string     `json:"email"`
+}
 
-		return fmt.Errorf("%s", response.message)
+func VerifyToken() (*tokenResponseData, error) {
+	response := makeRequest("GET", verifyTokenUrl, nil)
+	if response.error != nil {
+		return nil, response.error
 	}
 
-	return nil
+	jsonData := &tokenResponseData{}
+	err := json.Unmarshal(response.body, jsonData)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonData, nil
 }
 
 func SetToken(token string) error {
@@ -34,8 +44,24 @@ func SetToken(token string) error {
 	return nil
 }
 
+func SetTokenUser(user, email, name string) error {
+	viper.Set("user", user)
+	viper.Set("email", email)
+	viper.Set("name", name)
+
+	err := viper.WriteConfig()
+	if err != nil {
+		return fmt.Errorf("could not write config: %s", err.Error())
+	}
+
+	return nil
+}
+
 func RemoveToken() error {
 	viper.Set("token", "")
+	viper.Set("user", "")
+	viper.Set("email", "")
+	viper.Set("name", "")
 
 	err := viper.WriteConfig()
 	if err != nil {
@@ -47,4 +73,8 @@ func RemoveToken() error {
 
 func IsTokenAvailable() bool {
 	return len(viper.GetString("token")) > 0
+}
+
+func IsTokenUserAvailable() bool {
+	return len(viper.GetString("user")) > 0
 }
