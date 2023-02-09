@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/user"
 	"path"
@@ -34,7 +33,7 @@ func Init() {
 	}
 
 	if _, err := os.Stat(getConfigPath()); os.IsNotExist(err) {
-		err = ioutil.WriteFile(getConfigPath(), []byte("{}"), 0600)
+		err = os.WriteFile(getConfigPath(), []byte("{}"), 0600)
 		if err != nil {
 			panic(err)
 		}

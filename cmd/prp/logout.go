@@ -15,7 +15,7 @@ var logoutCmd = &cobra.Command{
 		if api.IsTokenAvailable() && api.IsTokenUserAvailable() {
 			return api.RemoveToken()
 		}
-		
+
 		fmt.Println("You have previously signed out successfully. You can sign in again with `./prp gh TOKEN_VALUE`")
 		return nil
 	},

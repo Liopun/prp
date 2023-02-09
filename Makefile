@@ -1,3 +1,18 @@
-go run main.go --version
+.PHONY:
+.SILENT:
+.DEFAULT_GOAL := lint
 
-go build -o ./.dist/prp -ldflags="-X 'github.com/liopun/prp/cmd/prp.version=1.0.0'" main.go
+gdraft:
+	git add .
+	git commit -m "${msg}"
+
+git:
+	git add .
+	git commit -m "${msg}"
+	git push
+
+lint:
+	golangci-lint run
+
+build:
+	go build -o ./.dist/prp -ldflags="-X 'github.com/liopun/prp/cmd/prp.version=${ver}'" main.go
