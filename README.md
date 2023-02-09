@@ -1,11 +1,8 @@
 # Package Restore Point CLI tool
-A simple package backup manager CLI tool that restores your brew packages to a previously saved state point.
+A simple CLI tool that backups your installed packages list, and reinstall the packages to a new system.
+This offers the portability of your current installed packages.
 
-This is useful when setting up your new MacOS and you need to reinstall all of your homebrew packages.
-
-This package use your github as data store for keeping your saved state for future use.
-
-- `prp gh TOKEN_HERE`
+This package use your github as data store for keeping your installed packages list for future use.
 
 ## Supported OS
 - MacOS
@@ -21,6 +18,10 @@ The latest release can be found [here](https://github.com/Liopun/prp/releases) a
 1. Clone this repository
 2. Build with `make build ver="v0.15"`
 3. Run `./.dist/prp -h` or Copy `prp` file to your `$PATH` and use it from there.
+
+## Get Started
+- To get started and authenticate with github, run `prp gh TOKEN_HERE`
+You can find out out adding a personal token to your github account [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 ## Supported Package Managers
 - Homebrew
