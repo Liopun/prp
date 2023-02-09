@@ -30,7 +30,7 @@ var brewCmd = &cobra.Command{
 
 		ctx := context.Background()
 		repo := prp.NewGhRepo(github.NewTokenClient(ctx, viper.GetString("token")))
-		service := prp.NewGhService(repo)
+		service := prp.NewGitService(repo)
 
 		gitRepo := viper.GetString("REPO_NAME")
 

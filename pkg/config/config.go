@@ -57,7 +57,7 @@ func getConfigPath() string {
 func getDirPath(dirName string) string {
 	usr, err := user.Current()
 	if err != nil {
-		fmt.Println("Can't get your home directory.")
+		fmt.Println("can't get your home directory.")
 		os.Exit(1)
 	}
 

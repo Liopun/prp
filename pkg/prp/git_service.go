@@ -6,10 +6,10 @@ import (
 )
 
 type GhService struct {
-	repo GhRepo
+	repo GitRepo
 }
 
-func NewGhService(repo GhRepo) *GhService {
+func NewGitService(repo GitRepo) *GhService {
 	return &GhService{repo}
 }
 
@@ -41,9 +41,6 @@ func (s *GhService) AddBackupToRepo(ctx context.Context, inp GitBackupInput) (st
 	if err != nil {
 		return "", err;
 	}
-	// fmt.Println("gggggg", inp.OwnerID, inp.RepositoryName)
-	// fmt.Printf("******** %+v", ref)
-	// fmt.Printf("$$$$$$$$ %+v", err)
 
-	return "Brewfile has been updated in the backup repository", nil
+	return "brewfile has been updated in the backup repository", nil
 }

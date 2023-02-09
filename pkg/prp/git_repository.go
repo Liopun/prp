@@ -8,24 +8,24 @@ import (
 	"github.com/google/go-github/v50/github"
 )
 
-type GhRepo interface {
+type GitRepo interface {
 	AddGitPrivateRepo(ctx context.Context, inp GitRepositoryInput) (string, error)
 	GetGitRef(ctx context.Context, inp GitBackupInput) (ref *github.Reference, err error)
 	GetGitTree(ctx context.Context, ref *github.Reference, inp GitBackupInput) (tree *github.Tree, err error)
 	PushGitCommit(ctx context.Context, ref *github.Reference, tree *github.Tree, inp GitBackupInput) error
 }
 
-type GhRepository struct {
+type GitRepository struct {
 	client *github.Client
 }
 
-func NewGhRepo(client *github.Client) *GhRepository {
-	return &GhRepository{
+func NewGhRepo(client *github.Client) *GitRepository {
+	return &GitRepository{
 		client: client,
 	}
 }
 
-func (r *GhRepository) AddGitPrivateRepo(ctx context.Context, inp GitRepositoryInput) (string, error) {
+func (r *GitRepository) AddGitPrivateRepo(ctx context.Context, inp GitRepositoryInput) (string, error) {
 	gitRepo := &github.Repository{
 		Name: &inp.RepositoryName,
 		Private: &inp.Private,
@@ -38,10 +38,10 @@ func (r *GhRepository) AddGitPrivateRepo(ctx context.Context, inp GitRepositoryI
 		return "", err
 	}
 
-	return fmt.Sprintf("New repo created: %s", repo.GetName()), nil
+	return fmt.Sprintf("new repo created: %s", repo.GetName()), nil
 }
 
-func (r *GhRepository) GetGitRef(ctx context.Context, inp GitBackupInput) (ref *github.Reference, err error) {
+func (r *GitRepository) GetGitRef(ctx context.Context, inp GitBackupInput) (ref *github.Reference, err error) {
 	if ref, _, err = r.client.Git.GetRef(ctx, inp.OwnerID, inp.RepositoryName, "refs/heads/"+inp.BranchName); err == nil {
 		return ref, nil
 	}
@@ -56,7 +56,7 @@ func (r *GhRepository) GetGitRef(ctx context.Context, inp GitBackupInput) (ref *
 	return ref, err
 }
 
-func (r *GhRepository) GetGitTree(ctx context.Context, ref *github.Reference, inp GitBackupInput) (tree *github.Tree, err error) {
+func (r *GitRepository) GetGitTree(ctx context.Context, ref *github.Reference, inp GitBackupInput) (tree *github.Tree, err error) {
 	// Create a tree with what to commit.
 	entries := []*github.TreeEntry{}
 
@@ -73,7 +73,7 @@ func (r *GhRepository) GetGitTree(ctx context.Context, ref *github.Reference, in
 	return tree, err
 }
 
-func (r *GhRepository) PushGitCommit(ctx context.Context, ref *github.Reference, tree *github.Tree, inp GitBackupInput) error {
+func (r *GitRepository) PushGitCommit(ctx context.Context, ref *github.Reference, tree *github.Tree, inp GitBackupInput) error {
 	// Get the parent commit to attach the commit to.
 	parent, _, err := r.client.Repositories.GetCommit(ctx, inp.OwnerID, inp.RepositoryName, *ref.Object.SHA, nil)
 	if err != nil {

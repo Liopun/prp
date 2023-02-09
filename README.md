@@ -5,13 +5,13 @@ This is useful when setting up your new MacOS and you need to reinstall all of y
 
 This package use your github as data store for keeping your saved state for future use.
 
-- prp gh TOKEN
+- `prp gh TOKEN`
 
 ## Supported OS
 - MacOS
 
 ## Installation
-`brew install liopun/prp`
+`brew install liopun/brew/prp`
 
 ## Supported Package Managers
 - Homebrew
@@ -20,6 +20,6 @@ This package use your github as data store for keeping your saved state for futu
 
 ## Roadmaps
 - Support more package managers
-    - [] macports
-    - [] nix
-    - [] pkgsrc
+    - macports
+    - nix
+    - pkgsrc

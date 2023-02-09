@@ -21,7 +21,7 @@ var restoreCmd = &cobra.Command{
 			return err
 		}
 		if !(api.IsTokenAvailable() && api.IsTokenUserAvailable()) {
-			return fmt.Errorf("your token does not exist. try `./prp gh GIT_TOKEN` to authenticate")
+			return fmt.Errorf("your token does not exist. try `prp gh GIT_TOKEN` to authenticate")
 		}
 
 		fmt.Println("cloning backup repo to a local path...")
