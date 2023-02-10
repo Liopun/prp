@@ -1,6 +1,10 @@
 # Package Restore Point CLI tool
 A convenient solution for backing up and restoring your installed packages. This tool offers the portability of your current installed packages and utilizes your GitHub account as a data store for maintaining a record of your packages for future use.
 
+## Use Cases
+- Moving to a brand new Macbook
+- Duplicating your Homebrew setup across different devices
+
 ## Supported On
 - MacOS
 
