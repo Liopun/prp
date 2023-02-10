@@ -7,6 +7,8 @@ A convenient solution for backing up and restoring your installed packages. This
 
 ## Supported On
 - MacOS
+- Linux
+- Windows
 
 ## Supported Package Managers
 - Homebrew
