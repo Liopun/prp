@@ -18,10 +18,10 @@ const (
 	gitEnv = "GIT_DIR"
 )
 
-func CreateBrewDump() (string, error) {
+func CreateBrewDump() error {
 	brewDir := viper.GetString(brewEnv)
 	if len(brewDir) == 0 {
-		return "", fmt.Errorf("%s dir was not set properly", brewEnv)
+		return fmt.Errorf("%s dir was not set properly", brewEnv)
 	}
 
 	brewFile := brewDir+"/Brewfile"
@@ -31,40 +31,44 @@ func CreateBrewDump() (string, error) {
 		fmt.Println("brew dump file found: getting rid of it first...")
 		err = os.Remove(brewFile)
 		if err != nil {
-			return "", err
+			return err
 		}
 	}
 
 	cmd := exec.Command(cbd, cbdBundle, cbdDump)
 	cmd.Dir = brewDir
 
-	out, err := cmd.Output()
+	err = cmd.Run()
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	return string(out), nil
+	return nil
 }
 
-func RestoreBrewPackages() (string, error) {
+func RestoreBrewPackages() error {
 	gitDir := viper.GetString(gitEnv)
 	if len(gitDir) == 0 {
-		return "", fmt.Errorf("%s dir was not set properly", gitEnv)
+		return fmt.Errorf("%s dir was not set properly", gitEnv)
 	}
 
 	brewFile := gitDir+"/Brewfile"
 	_, err := os.Stat(brewFile)
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	cmd := exec.Command(cbd, cbdBundle, cbdRestore)
 	cmd.Dir = gitDir
 
-	out, err := cmd.Output()
+	// displaying output
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err = cmd.Run()
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	return string(out), nil
+	return nil
 }
