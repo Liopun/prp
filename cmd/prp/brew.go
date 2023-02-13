@@ -21,7 +21,7 @@ var brewCmd = &cobra.Command{
 		}
 
 		fmt.Println("Generating homebrew dump file...")
-		_, err := prp.CreateBrewDump()
+		err := prp.CreateBrewDump()
 		if err != nil {
 			return err
 		}

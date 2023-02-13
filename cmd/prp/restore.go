@@ -32,11 +32,9 @@ var restoreCmd = &cobra.Command{
 
 		if args[0] == "brew" && ok {
 			fmt.Println("restoring homebrew packages in progress...")
-			if _, err := prp.RestoreBrewPackages(); err != nil {
+			if err := prp.RestoreBrewPackages(); err != nil {
 				return err
 			}
-
-			fmt.Println("restoring homebrew packages on this computer is done!")
 		} else {
 			return fmt.Errorf("wrong command argument, try prp restore brew")
 		}
