@@ -13,24 +13,24 @@ import (
 	"github.com/spf13/viper"
 )
 
-var brewCmd = &cobra.Command{
-	Use: "brew",
-	Short: "Create a restoring point for installed homebrew package",
+var portCmd = &cobra.Command{
+	Use: "port",
+	Short: "Create a restoring point for installed macports package",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if ok := prp.IsCommandAvailable("brew"); !ok {
-			return errors.New("homebrew not detected on this machine, install Homebrew first to get started")
+			return errors.New("macports not detected on this machine, install Macports first to get started")
 		}
 
 		if _, err := api.VerifyToken(); err != nil {
 			return err
 		}
 
-		err := prp.CreateBrewDump()
+		err := prp.CreatePortDump()
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Brew package restore point has been successfully created! You will need to run 'prp restore brew' in the future")
+		fmt.Println("Macports package restore point has been successfully created! You will need to run 'prp restore port' in the future")
 
 		ctx := context.Background()
 		repo := prp.NewGhRepo(github.NewTokenClient(ctx, viper.GetString("token")))
@@ -58,8 +58,8 @@ var brewCmd = &cobra.Command{
 			RepositoryName: gitRepo,
 			OwnerName: viper.GetString("name"),
 			OwnerEmail: viper.GetString("email"),
-			CommitFiles: []string{fmt.Sprintf("%s/Brewfile:Brewfile", viper.GetString("BREW_DIR"))},
-			CommitMessage: fmt.Sprintf("New brew bundle file - %v", time.Now()),
+			CommitFiles: []string{fmt.Sprintf("%s/Portfile:Portfile", viper.GetString("PORT_DIR"))},
+			CommitMessage: fmt.Sprintf("New macport bundle file - %v", time.Now()),
 		})
 		if err != nil {
 			return err
@@ -72,5 +72,5 @@ var brewCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(brewCmd)
+	rootCmd.AddCommand(portCmd)
 }

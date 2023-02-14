@@ -42,5 +42,5 @@ func (s *GhService) AddBackupToRepo(ctx context.Context, inp GitBackupInput) (st
 		return "", err;
 	}
 
-	return "brewfile has been updated in the backup repository", nil
+	return fmt.Sprintf("Backup Repository Updated: %s", inp.CommitMessage), nil
 }

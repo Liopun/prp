@@ -1,8 +1,11 @@
 package prp
 
 import (
+	"bufio"
 	"errors"
+	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -25,4 +28,48 @@ func getFileContent(fileArg string) (targetName string, b []byte, err error) {
 
 	b, err = os.ReadFile(localFile)
 	return targetName, b, err
+}
+
+// prompt user for confimation
+func confirmPrompt(msg string) bool {
+	r := bufio.NewReader(os.Stdin)
+	var input string
+
+	for {
+		fmt.Println(msg)
+		input, _ = r.ReadString('\n')
+		input = strings.TrimSpace(input)
+		input = strings.ToLower(input)
+
+		if input == "y" || input == "yes" || input == "" {
+			return true
+		}
+		if input == "n" || input == "no" {
+			return false
+		}
+	}
+}
+
+func runCommand(cwd string, output bool, mainCmd string, cmd ...string) error {
+	newCmd := exec.Command(mainCmd, cmd...)
+
+	if len(cwd) > 0 { // change current dir if needed
+		newCmd.Dir = cwd
+	}
+
+	if output { // needs to stream output
+		newCmd.Stdout = os.Stdout
+		newCmd.Stderr = os.Stderr
+	}
+
+	return newCmd.Run()
+}
+
+func saveCommandToFile(outDir *os.File, mainCmd string, cmd ...string) error {
+	newCmd := exec.Command(mainCmd, cmd...)
+
+	newCmd.Stdout = outDir
+	newCmd.Stderr = os.Stderr
+
+	return newCmd.Run()
 }
