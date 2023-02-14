@@ -12,10 +12,13 @@ import (
 const (
 	cbd = "brew"
 	cpd = "port"
+	cnd = "nix-env"
 	cbdBundle = "bundle"
 	cpdBundle = "echo"
+	cndBundle = "-q"
 	cbdDump = "dump"
 	cpdDump = "requested"
+	cndDump = "--installed"
 	cpdConnector = ">"
 	cbdRestore = "install"
 	cpdRestore = "install"
@@ -24,6 +27,7 @@ const (
 	cbdUpgrade = "upgrade"
 	brewEnv = "BREW_DIR"
 	portEnv = "PORT_DIR"
+	nixEnv = "NIX_DIR"
 	gitEnv = "GIT_DIR"
 	install = "install"
 	shMain = "/bin/sh"
@@ -94,6 +98,34 @@ func CreatePortDump() error {
 	defer outFile.Close()
 
 	return saveCommandToFile(outFile, cpd, cpdBundle, cpdDump)
+}
+
+func CreateNixDump() error {
+	nixDir := viper.GetString(nixEnv)
+	if len(nixDir) == 0 {
+		return fmt.Errorf("%s dir was not set properly", nixEnv)
+	}
+
+	nixFile := nixDir+"/Nixfile"
+	fmt.Println("generating nix dump file...")
+
+	_, err := os.Stat(nixFile)
+	if err == nil {
+		fmt.Println("nix dump file found: getting rid of it first...")
+		err = os.Remove(nixFile)
+		if err != nil {
+			return err
+		}
+	}
+
+	outFile, err := os.Create(nixFile)
+	if err != nil {
+		return err
+	}
+
+	defer outFile.Close()
+
+	return saveCommandToFile(outFile, cnd, cndBundle, cndDump)
 }
 
 func RestoreBrewPackages() error {

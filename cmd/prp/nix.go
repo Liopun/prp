@@ -12,24 +12,24 @@ import (
 	"github.com/spf13/viper"
 )
 
-var portCmd = &cobra.Command{
-	Use: "port",
-	Short: fmt.Sprintf(CMD_SHORT_MSG, PORT),
+var nixCmd = &cobra.Command{
+	Use: "nix",
+	Short: fmt.Sprintf(CMD_SHORT_MSG, NIX),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if ok := prp.IsCommandAvailable("port"); !ok {
-			return fmt.Errorf(COMMAND_NOT_DETECTED, PORT)
+		if ok := prp.IsCommandAvailable("nix-env"); !ok {
+			return fmt.Errorf(COMMAND_NOT_DETECTED, NIX)
 		}
 
 		if _, err := api.VerifyToken(); err != nil {
 			return err
 		}
 
-		err := prp.CreatePortDump()
+		err := prp.CreateNixDump()
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf(PACKAGE_RESTORE_POINT, "Macports", "prp restore port")
+		fmt.Printf(PACKAGE_RESTORE_POINT, "Nix", "prp restore nix")
 
 		ctx := context.Background()
 		repo := prp.NewGhRepo(github.NewTokenClient(ctx, viper.GetString("token")))
@@ -57,8 +57,8 @@ var portCmd = &cobra.Command{
 			RepositoryName: gitRepo,
 			OwnerName: viper.GetString("name"),
 			OwnerEmail: viper.GetString("email"),
-			CommitFiles: []string{fmt.Sprintf("%s/Portfile:Portfile", viper.GetString("PORT_DIR"))},
-			CommitMessage: fmt.Sprintf(GITHUB_REPO_COMMIT_MSG, PORT, time.Now()),
+			CommitFiles: []string{fmt.Sprintf("%s/Nixfile:Nixfile", viper.GetString("PORT_DIR"))},
+			CommitMessage: fmt.Sprintf(GITHUB_REPO_COMMIT_MSG, NIX, time.Now()),
 		})
 		if err != nil {
 			return err
@@ -71,5 +71,5 @@ var portCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(portCmd)
+	rootCmd.AddCommand(nixCmd)
 }
