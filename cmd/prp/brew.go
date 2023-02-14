@@ -2,7 +2,6 @@ package prp
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -15,10 +14,10 @@ import (
 
 var brewCmd = &cobra.Command{
 	Use: "brew",
-	Short: "Create a restoring point for installed homebrew package",
+	Short: fmt.Sprintf(CMD_SHORT_MSG, BREW),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if ok := prp.IsCommandAvailable("brew"); !ok {
-			return errors.New("homebrew not detected on this machine, install Homebrew first to get started")
+			return fmt.Errorf(COMMAND_NOT_DETECTED, BREW)
 		}
 
 		if _, err := api.VerifyToken(); err != nil {
@@ -30,7 +29,7 @@ var brewCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Println("Brew package restore point has been successfully created! You will need to run 'prp restore brew' in the future")
+		fmt.Printf(PACKAGE_RESTORE_POINT, "Homebrew", "prp restore brew")
 
 		ctx := context.Background()
 		repo := prp.NewGhRepo(github.NewTokenClient(ctx, viper.GetString("token")))
@@ -41,7 +40,7 @@ var brewCmd = &cobra.Command{
 		if !api.CheckGitRepoExist(gitRepo) {
 			res, err := service.AddGitPrivateRepo(ctx, prp.GitRepositoryInput{
 				RepositoryName: gitRepo,
-				Description: "This is an automatic created repo for backing up your package bundle dump files. PRP uses this repository to restore your packages. It's private by default, but you can change this if you wish to share your bundles files with others.",
+				Description: GITHUB_REPO_DESC,
 				Private: true,
 			})
 			if err != nil {
@@ -50,7 +49,7 @@ var brewCmd = &cobra.Command{
 
 			fmt.Println(res)
 		} else {
-			fmt.Println("PRP backup git repository found: no need to create one...")
+			fmt.Println(GITHUB_REPO_FOUND)
 		}
 
 		resp, err := service.AddBackupToRepo(ctx, prp.GitBackupInput{
@@ -59,7 +58,7 @@ var brewCmd = &cobra.Command{
 			OwnerName: viper.GetString("name"),
 			OwnerEmail: viper.GetString("email"),
 			CommitFiles: []string{fmt.Sprintf("%s/Brewfile:Brewfile", viper.GetString("BREW_DIR"))},
-			CommitMessage: fmt.Sprintf("New brew bundle file - %v", time.Now()),
+			CommitMessage: fmt.Sprintf(GITHUB_REPO_COMMIT_MSG, BREW, time.Now()),
 		})
 		if err != nil {
 			return err

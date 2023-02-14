@@ -12,6 +12,7 @@ A convenient solution for backing up and restoring your installed packages. This
 
 ## Supported Package Managers
 - Homebrew
+- Macports
 
 ## Installation
 ### Homebrew
