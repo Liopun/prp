@@ -1,6 +1,7 @@
 package prp
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/liopun/prp/pkg/api"
@@ -15,7 +16,7 @@ var ghCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		_, err := api.VerifyToken()
 		if api.IsTokenAvailable() && api.IsTokenUserAvailable() && err == nil {
-			return fmt.Errorf("your current API Token is still valid. If you'd like to use a different API token, use %s first", "`logout`(./prp logout)")
+			return errors.New("your current API Token is still valid. If you'd like to use a different API token, use `logout`(./prp logout) first")
 		}
 
 		if err := api.SetToken(args[0]); err != nil {

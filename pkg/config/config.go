@@ -12,6 +12,7 @@ import (
 const (
 	configDir = ".config/"
 	brewDir = "brew/"
+	portDir = "port/"
 	gitDir = ".git/"
 )
 
@@ -19,6 +20,14 @@ func Init() {
 	// brew bundle dir
 	if _, err := os.Stat(getDirPath(brewDir)); os.IsNotExist(err) {
 		err = os.MkdirAll(getDirPath(brewDir), os.ModeDir|0755)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// port bundle dir
+	if _, err := os.Stat(getDirPath(portDir)); os.IsNotExist(err) {
+		err = os.MkdirAll(getDirPath(portDir), os.ModeDir|0755)
 		if err != nil {
 			panic(err)
 		}
@@ -42,6 +51,7 @@ func Init() {
 	viper.SetConfigFile(getConfigPath())
 	viper.SetDefault("BASE_URL", "https://api.github.com")
 	viper.SetDefault("BREW_DIR", getDirPath(brewDir))
+	viper.SetDefault("PORT_DIR", getDirPath(portDir))
 	viper.SetDefault("GIT_DIR", getDirPath(gitDir))
 	viper.SetDefault("REPO_NAME", "prp-backup-repo")
 	err := viper.ReadInConfig()

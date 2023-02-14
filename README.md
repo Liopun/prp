@@ -33,6 +33,9 @@ The latest release of PRP CLI tool can be found [here](https://github.com/Liopun
 - Homebrew
     - Backup your current Homebrew packages: `prp brew`
     - Restore/Install your previously saved Homebrew packages to another system: `prp restore brew`
+- Macports
+    - Backup your current Macports packages: `prp port`
+    - Restore/Install your previously saved Macports packages to another system: `prp restore port`
 
 ## Roadmap
 - Support more package managers
