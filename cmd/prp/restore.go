@@ -10,12 +10,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-
 var restoreCmd = &cobra.Command{
-	Use: "restore",
+	Use:   "restore",
 	Short: "Restore your packages from a previously created restore point",
-	Long: "Restore your packages from a previously created restore point, prp backup files are kept in a private github repo",
-	Args: cobra.MinimumNArgs(1),
+	Long:  "Restore your packages from a previously created restore point, prp backup files are kept in a private github repo",
+	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		_, err := api.VerifyToken()
 		if err != nil {
@@ -55,7 +54,7 @@ var restoreCmd = &cobra.Command{
 			}
 
 			fmt.Printf(PACKAGE_RESTORE_PROGRESS, NIX)
-			if err := prp.RestorePortsPackages(); err != nil {
+			if err := prp.RestoreNixPackages(); err != nil {
 				return err
 			}
 		} else {
