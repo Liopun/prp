@@ -11,9 +11,10 @@ import (
 
 const (
 	configDir = ".config/"
-	brewDir = "brew/"
-	portDir = "port/"
-	gitDir = ".git/"
+	brewDir   = "brew/"
+	portDir   = "port/"
+	nixDir    = "nix/"
+	gitDir    = ".git/"
 )
 
 func Init() {
@@ -28,6 +29,14 @@ func Init() {
 	// port bundle dir
 	if _, err := os.Stat(getDirPath(portDir)); os.IsNotExist(err) {
 		err = os.MkdirAll(getDirPath(portDir), os.ModeDir|0755)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// nix bundle dir
+	if _, err := os.Stat(getDirPath(gitDir)); os.IsNotExist(err) {
+		err = os.MkdirAll(getDirPath(gitDir), os.ModeDir|0755)
 		if err != nil {
 			panic(err)
 		}
@@ -52,7 +61,8 @@ func Init() {
 	viper.SetDefault("BASE_URL", "https://api.github.com")
 	viper.SetDefault("BREW_DIR", getDirPath(brewDir))
 	viper.SetDefault("PORT_DIR", getDirPath(portDir))
-	viper.SetDefault("GIT_DIR", getDirPath(gitDir))
+	viper.SetDefault("PORT_DIR", getDirPath(portDir))
+	viper.SetDefault("NIX_DIR", getDirPath(nixDir))
 	viper.SetDefault("REPO_NAME", "prp-backup-repo")
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -71,5 +81,5 @@ func getDirPath(dirName string) string {
 		os.Exit(1)
 	}
 
-	return path.Join(usr.HomeDir, "/.prp/" + dirName)
+	return path.Join(usr.HomeDir, "/.prp/"+dirName)
 }

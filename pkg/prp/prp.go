@@ -3,6 +3,7 @@ package prp
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -10,33 +11,33 @@ import (
 
 // logic
 const (
-	cbd = "brew"
-	cpd = "port"
-	cnd = "nix-env"
-	cbdBundle = "bundle"
-	cpdBundle = "echo"
-	cndBundle = "-q"
-	cbdDump = "dump"
-	cpdDump = "requested"
-	cndDump = "--installed"
-	cpdConnector = ">"
-	cbdRestore = "install"
-	cpdRestore = "install"
-	cpdRestoreArg = "$(cat Portfile)"
-	cbdUpdate = "update"
-	cbdUpgrade = "upgrade"
-	brewEnv = "BREW_DIR"
-	portEnv = "PORT_DIR"
-	nixEnv = "NIX_DIR"
-	gitEnv = "GIT_DIR"
-	install = "install"
-	shMain = "/bin/sh"
-	shMainArg = "-c"
-	sudo = "sudo"
+	cbd           = "brew"
+	cpd           = "port"
+	cnd           = "nix-env"
+	cbdBundle     = "bundle"
+	cpdBundle     = "echo"
+	cndBundle     = "-q"
+	cbdDump       = "dump"
+	cpdDump       = "requested"
+	cndDump       = "--installed"
+	cbdRestore    = "install"
+	cpdRestore    = "install"
+	cndRestore    = "-f"
+	cndRestoreArg = "-i"
+	cbdUpdate     = "update"
+	cbdUpgrade    = "upgrade"
+	brewEnv       = "BREW_DIR"
+	portEnv       = "PORT_DIR"
+	nixEnv        = "NIX_DIR"
+	gitEnv        = "GIT_DIR"
+	install       = "install"
+	shMain        = "/bin/sh"
+	shMainArg     = "-c"
+	sudo          = "sudo"
 )
 
 func IsCommandAvailable(name string) bool {
-	err := runCommand("", false, "command", "-v", name)
+	_, err := exec.LookPath(name)
 
 	return err == nil
 }
@@ -47,7 +48,7 @@ func CreateBrewDump() error {
 		return fmt.Errorf("%s dir was not set properly", brewEnv)
 	}
 
-	brewFile := brewDir+"/Brewfile"
+	brewFile := brewDir + "/Brewfile"
 
 	userInp := confirmPrompt("it's recommended that you update/upgrade your Homebrew packages before backing them up, Do you want to perform update first? [y|n]: ")
 	if userInp {
@@ -78,7 +79,7 @@ func CreatePortDump() error {
 		return fmt.Errorf("%s dir was not set properly", portEnv)
 	}
 
-	portFile := portDir+"/Portfile"
+	portFile := portDir + "/Portfile"
 	fmt.Println("generating macports dump file...")
 
 	_, err := os.Stat(portFile)
@@ -106,7 +107,7 @@ func CreateNixDump() error {
 		return fmt.Errorf("%s dir was not set properly", nixEnv)
 	}
 
-	nixFile := nixDir+"/Nixfile"
+	nixFile := nixDir + "/Nixfile"
 	fmt.Println("generating nix dump file...")
 
 	_, err := os.Stat(nixFile)
@@ -143,7 +144,7 @@ func RestorePortsPackages() error {
 		return fmt.Errorf("%s dir was not set properly", gitEnv)
 	}
 
-	_, content, err := getFileContent(gitDir+"/Portfile")
+	_, content, err := getFileContent(gitDir + "/Portfile")
 	if err != nil {
 		return err
 	}
@@ -152,4 +153,13 @@ func RestorePortsPackages() error {
 	pkgList = strings.Replace(pkgList, "\n", "", -1)
 
 	return runCommand(gitDir, true, shMain, shMainArg, fmt.Sprintf("%s %s %s %s", sudo, cpd, cpdRestore, pkgList))
+}
+
+func RestoreNixPackages() error {
+	gitDir := viper.GetString(gitEnv)
+	if len(gitDir) == 0 {
+		return fmt.Errorf("%s dir was not set properly", gitEnv)
+	}
+
+	return runCommand(gitDir, true, cnd, cndRestore, "Nixfile", cndRestoreArg)
 }
