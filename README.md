@@ -2,17 +2,17 @@
 A convenient solution for backing up and restoring your installed packages. This tool offers the portability of your current installed packages and utilizes your GitHub account as a data store for maintaining a record of your packages for future use.
 
 ## Use Cases
-- Moving to a brand new Macbook
-- Duplicating your Homebrew setup across different devices
+- Moving to a brand new device (MacOs, Linux)
+- Duplicating your Homebrew/Macports/Nix setup across different devices
 
 ## Supported On
-- MacOS
+- MacOs
 - Linux
-- Windows
 
 ## Supported Package Managers
-- Homebrew
-- Macports
+- [Homebrew](https://brew.sh/)
+- [Macports](https://www.macports.org/)
+- [Nix](https://nixos.wiki/wiki/Main_Page)
 
 ## Installation
 ### Homebrew
@@ -37,11 +37,14 @@ The latest release of PRP CLI tool can be found [here](https://github.com/Liopun
 - Macports
     - Backup your current Macports packages: `prp port`
     - Restore/Install your previously saved Macports packages to another system: `prp restore port`
+- NixOS
+    - Backup your current NixOs packages: `prp nix`
+    - Restore/Install your previously saved NixOs packages to another system: `prp restore nix`
 
 ## Roadmap
 - Support more package managers
-    - macports
-    - nix
+    - macports [x]
+    - nix [x]
     - pkgsrc
 
 ## Adding To This Project
