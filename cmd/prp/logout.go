@@ -3,15 +3,15 @@ package prp
 import (
 	"fmt"
 
-	"github.com/liopun/prp/pkg/api"
+	"github.com/liopun/prp/api"
 	"github.com/spf13/cobra"
 )
 
 var logoutCmd = &cobra.Command{
-	Use: "logout",
+	Use:   "logout",
 	Short: "Logout of prp",
-	Long: "Logout of prp, you can sign in again with `prp gh TOKEN_VALUE`",
-	RunE: func(cmd *cobra.Command, args []string) error {
+	Long:  "Logout of prp, you can sign in again with `prp gh TOKEN_VALUE`",
+	RunE: func(_ *cobra.Command, _ []string) error {
 		if api.IsTokenAvailable() && api.IsTokenUserAvailable() {
 			return api.RemoveToken()
 		}

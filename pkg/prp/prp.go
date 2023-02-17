@@ -22,7 +22,7 @@ const (
 	cndDump       = "--installed"
 	cbdRestore    = "install"
 	cpdRestore    = "install"
-	cndRestore    = "-f"
+	cndRestore    = "--install"
 	cndRestoreArg = "-i"
 	cbdUpdate     = "update"
 	cbdUpgrade    = "upgrade"
@@ -161,5 +161,15 @@ func RestoreNixPackages() error {
 		return fmt.Errorf("%s dir was not set properly", gitEnv)
 	}
 
-	return runCommand(gitDir, true, cnd, cndRestore, "Nixfile", cndRestoreArg)
+	pkgList, err := getFileContentArray(gitDir + "/Nixfile")
+	if err != nil {
+		return err
+	}
+
+	pkgListCmd := ""
+	for i := range pkgList {
+		pkgListCmd += " " + pkgList[i]
+	}
+
+	return runCommand(gitDir, true, shMain, shMainArg, fmt.Sprintf("%s %s %s", cnd, cndRestore, strings.TrimSpace(pkgListCmd)))
 }

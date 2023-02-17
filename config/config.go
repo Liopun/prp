@@ -35,8 +35,8 @@ func Init() {
 	}
 
 	// nix bundle dir
-	if _, err := os.Stat(getDirPath(gitDir)); os.IsNotExist(err) {
-		err = os.MkdirAll(getDirPath(gitDir), os.ModeDir|0755)
+	if _, err := os.Stat(getDirPath(nixDir)); os.IsNotExist(err) {
+		err = os.MkdirAll(getDirPath(nixDir), os.ModeDir|0755)
 		if err != nil {
 			panic(err)
 		}

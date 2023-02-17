@@ -16,18 +16,39 @@ func getFileContent(fileArg string) (targetName string, b []byte, err error) {
 	files := strings.Split(fileArg, ":")
 
 	switch {
-		case len(files) < 1:
-			return "", nil, errors.New("empty `-files` parameter")
-		case len(files) == 1:
-			localFile = files[0]
-			targetName = files[0]
-		default:
-			localFile = files[0]
-			targetName = files[1]
+	case len(files) < 1:
+		return "", nil, errors.New("empty `-files` parameter")
+	case len(files) == 1:
+		localFile = files[0]
+		targetName = files[0]
+	default:
+		localFile = files[0]
+		targetName = files[1]
 	}
 
 	b, err = os.ReadFile(localFile)
 	return targetName, b, err
+}
+
+func getFileContentArray(path string) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return lines, nil
 }
 
 // prompt user for confimation

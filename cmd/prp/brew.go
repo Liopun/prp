@@ -6,16 +6,16 @@ import (
 	"time"
 
 	"github.com/google/go-github/v50/github"
-	"github.com/liopun/prp/pkg/api"
+	"github.com/liopun/prp/api"
 	"github.com/liopun/prp/pkg/prp"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var brewCmd = &cobra.Command{
-	Use: "brew",
+	Use:   "brew",
 	Short: fmt.Sprintf(CMD_SHORT_MSG, BREW),
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, _ []string) error {
 		if ok := prp.IsCommandAvailable("brew"); !ok {
 			return fmt.Errorf(COMMAND_NOT_DETECTED, BREW)
 		}
@@ -40,8 +40,8 @@ var brewCmd = &cobra.Command{
 		if !api.CheckGitRepoExist(gitRepo) {
 			res, err := service.AddGitPrivateRepo(ctx, prp.GitRepositoryInput{
 				RepositoryName: gitRepo,
-				Description: GITHUB_REPO_DESC,
-				Private: true,
+				Description:    GITHUB_REPO_DESC,
+				Private:        true,
 			})
 			if err != nil {
 				return err
@@ -53,12 +53,12 @@ var brewCmd = &cobra.Command{
 		}
 
 		resp, err := service.AddBackupToRepo(ctx, prp.GitBackupInput{
-			OwnerID: viper.GetString("user"),
+			OwnerID:        viper.GetString("user"),
 			RepositoryName: gitRepo,
-			OwnerName: viper.GetString("name"),
-			OwnerEmail: viper.GetString("email"),
-			CommitFiles: []string{fmt.Sprintf("%s/Brewfile:Brewfile", viper.GetString("BREW_DIR"))},
-			CommitMessage: fmt.Sprintf(GITHUB_REPO_COMMIT_MSG, BREW, time.Now()),
+			OwnerName:      viper.GetString("name"),
+			OwnerEmail:     viper.GetString("email"),
+			CommitFiles:    []string{fmt.Sprintf("%s/Brewfile:Brewfile", viper.GetString("BREW_DIR"))},
+			CommitMessage:  fmt.Sprintf(GITHUB_REPO_COMMIT_MSG, BREW, time.Now()),
 		})
 		if err != nil {
 			return err

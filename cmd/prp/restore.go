@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/liopun/prp/pkg/api"
+	"github.com/liopun/prp/api"
 	"github.com/liopun/prp/pkg/prp"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -15,7 +15,7 @@ var restoreCmd = &cobra.Command{
 	Short: "Restore your packages from a previously created restore point",
 	Long:  "Restore your packages from a previously created restore point, prp backup files are kept in a private github repo",
 	Args:  cobra.MinimumNArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(_ *cobra.Command, args []string) error {
 		_, err := api.VerifyToken()
 		if err != nil {
 			return err
